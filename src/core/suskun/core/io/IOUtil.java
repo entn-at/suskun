@@ -18,5 +18,13 @@ public class IOUtil {
         return new DataInputStream(new BufferedInputStream(Files.newInputStream(path)));
     }
 
+    public static int readIntLe(DataInputStream dis) throws IOException {
+        return Integer.reverseBytes(dis.readInt());
+    }
+
+    public static short readShortLe(DataInputStream dis) throws IOException {
+        return Short.reverseBytes(dis.readShort());
+    }
+
 
 }

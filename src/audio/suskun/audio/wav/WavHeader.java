@@ -1,6 +1,5 @@
 package suskun.audio.wav;
 
-import com.google.common.io.BaseEncoding;
 import suskun.audio.AudioFormatException;
 import suskun.core.io.IOUtil;
 
@@ -37,40 +36,77 @@ import java.nio.file.Path;
 
 public class WavHeader {
 
+    AudioFormat format;
+    int dataStart;
+
+    private WavHeader(AudioFormat format, int dataStart) {
+        this.format = format;
+        this.dataStart = dataStart;
+    }
+
     public static WavHeader fromFile(Path path) throws IOException {
 
-        byte[] buffer4 = new byte[4];
-        byte[] buffer2 = new byte[2];
+        int byteCounter = 0;
+
         try (DataInputStream dis = IOUtil.getDataInputStream(path)) {
-            dis.readFully(buffer4);
-            String chunkId = bytesToString(buffer4);
+
+            // check `RIFF` and size.
+            String chunkId = readAsciiBe(dis);
             if (!chunkId.equalsIgnoreCase("RIFF")) {
                 throw new AudioFormatException("Chunk Id = `RIFF` [0x52, 0x49, 0x46, 0x46] is expected but "
-                        + chunkId + "[" + BaseEncoding.base16().encode(buffer4) + "]" +
-                        " is read.");
+                        + chunkId + " is read.");
             }
 
-            int size = Integer.reverseBytes(dis.readInt());
-            if(size<=0) {
+            int size = IOUtil.readIntLe(dis);
+            if (size <= 0) {
                 throw new AudioFormatException("RIFF chunk size must be positive. But it is " + size);
             }
 
-            dis.readFully(buffer4);
-            String format = bytesToString(buffer4);
-            if (!format.equalsIgnoreCase("WAVE")) {
+            // check RIFF format. Should be `WAVE`
+            String riffFormat = readAsciiBe(dis);
+            if (!riffFormat.equalsIgnoreCase("WAVE")) {
                 throw new AudioFormatException("Format = `WAVE` is expected but "
-                        + format + "[" + BaseEncoding.base16().encode(buffer4) + "]" +
-                        " is read.");
+                        + riffFormat + " is read.");
             }
 
+            // bytes load so far.
+            byteCounter += 4 + 4 + 4;
 
+            boolean fmtFound = false, dataFound = false;
+            AudioFormat format = null;
+            int dataStart = 0;
 
+            while (!fmtFound || !dataFound) {
 
+                chunkId = readAsciiBe(dis);
+                size = IOUtil.readIntLe(dis);
 
+                byteCounter += 4 + 4;
 
+                if (chunkId.equalsIgnoreCase("fmt ")) {
+                    format = AudioFormat.fromWavStream(dis);
+                    if (size > 16) {
+                        dis.skipBytes(size - 16);
+                    }
+                    fmtFound = true;
+                } else if (chunkId.equalsIgnoreCase("data")) {
+                    dataStart = byteCounter;
+                    dataFound = true;
+                    dis.skipBytes(size);
+                } else {
+                    dis.skipBytes(size);
+                }
+                byteCounter += size;
+            }
+            return new WavHeader(format, dataStart);
         }
-        return null;
 
+    }
+
+    private static String readAsciiBe(DataInputStream dis) throws IOException {
+        byte[] buffer4 = new byte[4];
+        dis.readFully(buffer4);
+        return bytesToString(buffer4);
     }
 
     private static String bytesToString(byte[] bytes) {
@@ -80,7 +116,6 @@ public class WavHeader {
         }
         return sb.toString();
     }
-
 
 
 }
