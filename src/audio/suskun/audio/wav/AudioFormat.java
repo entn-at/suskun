@@ -21,7 +21,6 @@ public class AudioFormat {
 
     enum Format {
         PCM(1),
-        IEEE_FLOAT(3),
         A_LAW(6),
         U_LAW(7);
 
@@ -35,8 +34,6 @@ public class AudioFormat {
             switch (value) {
                 case 1:
                     return PCM;
-                case 3:
-                    return IEEE_FLOAT;
                 case 6:
                     return A_LAW;
                 case 7:

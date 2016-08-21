@@ -36,12 +36,25 @@ import java.nio.file.Path;
 
 public class WavHeader {
 
+    /**
+     * Format data
+     */
     AudioFormat format;
+
+    /**
+     * Start of the data chunk content. This will be used for loading the actual data.
+     */
     int dataStart;
 
-    private WavHeader(AudioFormat format, int dataStart) {
+    /**
+     * Amount of bytes in data chunk content.
+     */
+    int dataContentSize;
+
+    private WavHeader(AudioFormat format, int dataStart, int dataContentSize) {
         this.format = format;
         this.dataStart = dataStart;
+        this.dataContentSize = dataContentSize;
     }
 
     public static WavHeader fromFile(Path path) throws IOException {
@@ -75,6 +88,7 @@ public class WavHeader {
             boolean fmtFound = false, dataFound = false;
             AudioFormat format = null;
             int dataStart = 0;
+            int dataContentSize = 0;
 
             while (!fmtFound || !dataFound) {
 
@@ -85,12 +99,14 @@ public class WavHeader {
 
                 if (chunkId.equalsIgnoreCase("fmt ")) {
                     format = AudioFormat.fromWavStream(dis);
+                    // sometimes fmt has more data. we ignore it.
                     if (size > 16) {
                         dis.skipBytes(size - 16);
                     }
                     fmtFound = true;
                 } else if (chunkId.equalsIgnoreCase("data")) {
                     dataStart = byteCounter;
+                    dataContentSize = size;
                     dataFound = true;
                     dis.skipBytes(size);
                 } else {
@@ -98,9 +114,8 @@ public class WavHeader {
                 }
                 byteCounter += size;
             }
-            return new WavHeader(format, dataStart);
+            return new WavHeader(format, dataStart, dataContentSize);
         }
-
     }
 
     private static String readAsciiBe(DataInputStream dis) throws IOException {
@@ -117,5 +132,8 @@ public class WavHeader {
         return sb.toString();
     }
 
+    public int blockCount() {
+        return dataContentSize / format.bytePerBlock;
+    }
 
 }

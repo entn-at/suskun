@@ -40,30 +40,6 @@ public class ALawCodec {
         return (short) (sign == 0 ? data : -data);
     }
 
-    /**
-     * Decode one a-law byte
-     *
-     * @param alaw The encoded a-law byte
-     * @return A short containing the 16-bit result
-     */
-    public static short decode(byte alaw) {
-        return aLawToPcmMap[alaw & 0xff];
-    }
-
-    /**
-     * Decode an a-law encoded byte array.
-     *
-     * @param alawBytes bytes conatining encoded values
-     * @return integer array containing 16 bit short decoded values.
-     */
-    public static int[] decode(byte[] alawBytes) {
-        int result[] = new int[alawBytes.length];
-        for (int i = 0; i < alawBytes.length; i++) {
-            result[i] = aLawToPcmMap[alawBytes[i] & 0xff];
-        }
-        return result;
-    }
-
     private static final int MAX_ALAW = 0x7fff; //maximum that can be held in 15 bits
 
     private static byte[] pcmToALawMap;
@@ -129,4 +105,29 @@ public class ALawCodec {
             return MAX_USHORT + 1 + value;
         }
     }
+
+    /**
+     * Decode one a-law byte
+     *
+     * @param alaw The encoded a-law byte
+     * @return A short containing the 16-bit result
+     */
+    public static short decode(byte alaw) {
+        return aLawToPcmMap[alaw & 0xff];
+    }
+
+    /**
+     * Decode an a-law encoded byte array.
+     *
+     * @param alawBytes bytes conatining encoded values
+     * @return integer array containing 16 bit short decoded values.
+     */
+    public static int[] decode(byte[] alawBytes) {
+        int result[] = new int[alawBytes.length];
+        for (int i = 0; i < alawBytes.length; i++) {
+            result[i] = aLawToPcmMap[alawBytes[i] & 0xff];
+        }
+        return result;
+    }
+
 }
