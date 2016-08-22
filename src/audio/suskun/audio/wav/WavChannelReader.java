@@ -52,7 +52,7 @@ public class WavChannelReader {
             }
         }
 
-        return null;
+        return result;
     }
 
     private byte[] loadAllDataBytes() throws IOException {
@@ -64,6 +64,10 @@ public class WavChannelReader {
             logger.warn("Unexpected amount of sample data. [{} expected {} found.] ", allData.length, actualSize);
         }
         return allData;
+    }
+
+    public static void main(String[] args) {
+
     }
 
 }
