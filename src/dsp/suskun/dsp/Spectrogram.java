@@ -19,7 +19,7 @@ public class Spectrogram implements FloatDataProcessor {
 
     public Spectrogram(FastFourierTransform fft, boolean applyLog) {
         this.fft = fft;
-        this.applyLog = false;
+        this.applyLog = applyLog;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class Spectrogram implements FloatDataProcessor {
 
         input = fft.process(input);
 
-        float[] fftValues = input.getData();
+        float[] fftValues = input.getContent();
         float[] energy = new float[fftValues.length / 2 + 1];
 
         float first = fftValues[0] * fftValues[0];
