@@ -5,19 +5,19 @@ import suskun.core.FloatDataProcessor;
 import suskun.core.math.LogMath;
 
 /**
- * Calculates energy spectrogram values. Adapted from Kaldi code.
+ * Calculates energy spectrum values. Adapted from Kaldi code.
  */
-public class Spectrogram implements FloatDataProcessor {
+public class EnergySpectrum implements FloatDataProcessor {
 
     public final FastFourierTransform fft;
     public final boolean applyLog;
 
-    public Spectrogram(FastFourierTransform fft) {
+    public EnergySpectrum(FastFourierTransform fft) {
         this.fft = fft;
         this.applyLog = false;
     }
 
-    public Spectrogram(FastFourierTransform fft, boolean applyLog) {
+    public EnergySpectrum(FastFourierTransform fft, boolean applyLog) {
         this.fft = fft;
         this.applyLog = applyLog;
     }
@@ -27,7 +27,7 @@ public class Spectrogram implements FloatDataProcessor {
 
         input = fft.process(input);
 
-        float[] fftValues = input.getContent();
+        float[] fftValues = input.getData();
         float[] energy = new float[fftValues.length / 2 + 1];
 
         float first = fftValues[0] * fftValues[0];

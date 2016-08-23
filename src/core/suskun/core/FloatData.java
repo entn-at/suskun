@@ -8,34 +8,34 @@ import java.util.Arrays;
 public class FloatData {
 
     public final int id;
-    private float[] content;
+    private float[] data;
 
-    public FloatData(int id, float[] content) {
+    public FloatData(int id, float[] data) {
         this.id = id;
-        this.content = content;
+        this.data = data;
     }
 
-    public FloatData(float[] content) {
+    public FloatData(float[] data) {
         this.id = 0;
-        this.content = content;
+        this.data = data;
     }
 
     /**
-     * @return content itself.
+     * @return data itself.
      */
-    public float[] getContent() {
-        return content;
+    public float[] getData() {
+        return data;
     }
 
     /**
-     * @return a copy of the content.
+     * @return a copy of the data.
      */
     public float[] getCopyOfContent() {
-        return content.clone();
+        return data.clone();
     }
 
     /**
-     * Returns a new FloatData object with the given content
+     * Returns a new FloatData object with the given data
      *
      * @param data
      * @return
@@ -45,31 +45,39 @@ public class FloatData {
     }
 
     public FloatData append(float[] toAppend) {
-        float[] newContent = Arrays.copyOf(content, content.length + toAppend.length);
-        System.arraycopy(toAppend, 0, newContent, content.length, toAppend.length);
+        float[] newContent = Arrays.copyOf(data, data.length + toAppend.length);
+        System.arraycopy(toAppend, 0, newContent, data.length, toAppend.length);
         return new FloatData(id, newContent);
     }
 
     public void appendInPlace(float[] toAppend) {
-        float[] newContent = Arrays.copyOf(content, content.length + toAppend.length);
-        System.arraycopy(toAppend, 0, newContent, content.length, toAppend.length);
-        this.content = newContent;
+        float[] newContent = Arrays.copyOf(data, data.length + toAppend.length);
+        System.arraycopy(toAppend, 0, newContent, data.length, toAppend.length);
+        this.data = newContent;
     }
 
     public FloatData prepend(float[] toPrepend) {
-        float[] newContent = Arrays.copyOf(toPrepend, toPrepend.length + content.length);
-        System.arraycopy(content, 0, newContent, toPrepend.length, content.length);
+        float[] newContent = Arrays.copyOf(toPrepend, toPrepend.length + data.length);
+        System.arraycopy(data, 0, newContent, toPrepend.length, data.length);
         return new FloatData(id, newContent);
     }
 
     public void prependInPlace(float[] toPrepend) {
-        float[] newContent = Arrays.copyOf(toPrepend, toPrepend.length + content.length);
-        System.arraycopy(content, 0, newContent, toPrepend.length, content.length);
-        this.content = newContent;
+        float[] newContent = Arrays.copyOf(toPrepend, toPrepend.length + data.length);
+        System.arraycopy(data, 0, newContent, toPrepend.length, data.length);
+        this.data = newContent;
     }
 
     public int length() {
-        return content.length;
+        return data.length;
+    }
+
+    public boolean isEmpty() {
+        return data.length == 0;
+    }
+
+    public static FloatData empty() {
+        return new FloatData(0, new float[0]);
     }
 
 

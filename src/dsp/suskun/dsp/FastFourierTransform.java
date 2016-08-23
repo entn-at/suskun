@@ -46,7 +46,7 @@ public class FastFourierTransform implements FloatDataProcessor {
     public FloatData process(FloatData input) {
         if (input.length() > size) throw new IllegalArgumentException(
                 "input size=" + input.length() + "is larger than FFT size=" + size);
-        return input.copyFor(realFft(input.getContent()));
+        return input.copyFor(realFft(input.getData()));
     }
 
 

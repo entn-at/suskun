@@ -12,11 +12,11 @@ public class FloatDataTest {
         float[] expected = {5, 4, 3, 1, 2};
         FloatData d = new FloatData(content);
         FloatData d2 = d.append(toAppend);
-        Assert.assertArrayEquals(expected, d2.getContent(), 0.0001f);
+        Assert.assertArrayEquals(expected, d2.getData(), 0.0001f);
 
         float[] expected2 = {5, 4, 3, 1, 2, 1, 2};
         d2.appendInPlace(toAppend);
-        Assert.assertArrayEquals(expected2, d2.getContent(), 0.0001f);
+        Assert.assertArrayEquals(expected2, d2.getData(), 0.0001f);
     }
 
     @Test
@@ -26,11 +26,11 @@ public class FloatDataTest {
         float[] expected = {1, 2, 5, 4, 3};
         FloatData d = new FloatData(content);
         FloatData d2 = d.prepend(toPrepend);
-        Assert.assertArrayEquals(expected, d2.getContent(), 0.0001f);
+        Assert.assertArrayEquals(expected, d2.getData(), 0.0001f);
 
         float[] expected2 = {1, 2, 1, 2, 5, 4, 3};
         d2.prependInPlace(toPrepend);
-        Assert.assertArrayEquals(expected2, d2.getContent(), 0.0001f);
+        Assert.assertArrayEquals(expected2, d2.getData(), 0.0001f);
     }
 
 }
