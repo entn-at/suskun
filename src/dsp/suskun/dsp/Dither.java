@@ -39,10 +39,5 @@ public class Dither implements FloatDataProcessor {
         }
         return input;
     }
-
-    public static void main(String[] args) {
-        new Dither(1);
-        
-    }
 }
 
