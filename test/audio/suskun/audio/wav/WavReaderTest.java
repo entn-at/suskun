@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
-public class WavChannelReaderTest {
+public class WavReaderTest {
 
     @Test
     public void test16KhzMono() throws IOException {
@@ -23,7 +23,7 @@ public class WavChannelReaderTest {
                 -12.0f, -14.0f, -16.0f, -28.0f, 18.0f, 0.0f
         };
         Path input = Paths.get("test/data/wav/16khz-16bit-mono.wav");
-        WavChannelReader reader = new WavChannelReader(input, 0);
+        WavReader reader = new WavReader(input, 0);
         float[] data = reader.loadAll();
         Assert.assertEquals(data.length, 32047);
         float[] first20 = Arrays.copyOfRange(data, 0, 20);
@@ -43,7 +43,7 @@ public class WavChannelReaderTest {
                 8.0f, 8.0f, 8.0f, 8.0f, 8.0f,
                 8.0f, 8.0f, 8.0f, 8.0f, 8.0f};
         Path input = Paths.get("test/data/wav/alaw-stereo.wav");
-        WavChannelReader reader = new WavChannelReader(input, 0);
+        WavReader reader = new WavReader(input, 0);
         float[] data = reader.loadAll();
         Assert.assertEquals(data.length, 23493);
         float[] first10 = Arrays.copyOfRange(data, 0, 10);
@@ -63,7 +63,7 @@ public class WavChannelReaderTest {
                 8.0f, 8.0f, 8.0f, 8.0f, 8.0f,
                 8.0f, -8.0f, -8.0f, -8.0f, -8.0f};
         Path input = Paths.get("test/data/wav/alaw-stereo.wav");
-        WavChannelReader reader = new WavChannelReader(input, 1);
+        WavReader reader = new WavReader(input, 1);
         float[] data = reader.loadAll();
         Assert.assertEquals(data.length, 23493);
         float[] first10 = Arrays.copyOfRange(data, 0, 10);
@@ -82,7 +82,7 @@ public class WavChannelReaderTest {
                 80.0f, 80.0f, 48.0f, -40.0f, -40.0f,
                 80.0f, 64.0f, 32.0f, 24.0f, -64.0f};
         Path input = Paths.get("test/data/wav/mulaw-stereo.wav");
-        WavChannelReader reader = new WavChannelReader(input, 0);
+        WavReader reader = new WavReader(input, 0);
         float[] data = reader.loadAll();
         Assert.assertEquals(data.length, 23493);
         float[] from500 = Arrays.copyOfRange(data, 500, 510);

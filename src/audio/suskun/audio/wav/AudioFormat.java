@@ -56,7 +56,7 @@ public class AudioFormat {
         this.channelCount = channelCount;
         this.sampleRate = sampleRate;
         this.byteRate = byteRate;
-        this.bytePerSample = bitsPerSample/8;
+        this.bytePerSample = bitsPerSample / 8;
         this.bytePerBlock = bytePerBlock;
         this.bitsPerSample = bitsPerSample;
         this.littleEndian = littleEndian;
@@ -79,5 +79,16 @@ public class AudioFormat {
 
     }
 
+    public double durationInSeconds(int sampleAmount) {
+        return sampleAmount * 1d / sampleRate;
+    }
+
+    public int blockIndexForTime(double time) {
+        return (int) Math.round(time * sampleRate);
+    }
+
+    public int byteIndexForTime(double time) {
+        return blockIndexForTime(time) * bytePerBlock;
+    }
 
 }

@@ -49,12 +49,12 @@ public class WavHeader {
     /**
      * Amount of bytes in data chunk content.
      */
-    int dataContentSize;
+    int dataSizeInBytes;
 
-    private WavHeader(AudioFormat format, int dataStart, int dataContentSize) {
+    private WavHeader(AudioFormat format, int dataStart, int dataSizeInBytes) {
         this.format = format;
         this.dataStart = dataStart;
-        this.dataContentSize = dataContentSize;
+        this.dataSizeInBytes = dataSizeInBytes;
     }
 
     public static WavHeader fromFile(Path path) throws IOException {
@@ -132,8 +132,15 @@ public class WavHeader {
         return sb.toString();
     }
 
+    /**
+     * @return Total duration in seconds.
+     */
+    public double durationInSeconds() {
+        return format.durationInSeconds(blockCount());
+    }
+
     public int blockCount() {
-        return dataContentSize / format.bytePerBlock;
+        return dataSizeInBytes / format.bytePerBlock;
     }
 
 }

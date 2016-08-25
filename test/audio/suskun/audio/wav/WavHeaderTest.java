@@ -39,4 +39,11 @@ public class WavHeaderTest {
         Assert.assertEquals(true, format.littleEndian);
     }
 
+    @Test
+    public void durationTest() throws IOException {
+        WavHeader header = WavHeader.fromFile(Paths.get("test/data/wav/16khz-16bit-mono.wav"));
+        Assert.assertEquals(2.0029, header.durationInSeconds(), 0.001);
+    }
+
+
 }
