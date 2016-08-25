@@ -4,6 +4,8 @@ import suskun.core.FloatData;
 import suskun.core.FloatDataProcessor;
 import suskun.core.collections.FloatArrays;
 
+import java.util.List;
+
 import static java.lang.Math.PI;
 import static java.lang.Math.cos;
 
@@ -42,6 +44,10 @@ public class WindowFunction implements FloatDataProcessor {
     public FloatData process(FloatData data) {
         FloatArrays.multiplyToFirst(data.getData(), multiplier);
         return data;
+    }
+
+    public void processAll(List<FloatData> input) {
+        input.forEach(this::process);
     }
 
     public enum Function {

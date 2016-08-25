@@ -44,6 +44,15 @@ public class FloatData {
         return new FloatData(this.id, data);
     }
 
+    public FloatData copy() {
+        return new FloatData(this.id, data.clone());
+    }
+
+    public void resizeInPlace(int size) {
+        this.data = Arrays.copyOf(this.data, size);
+    }
+
+
     public FloatData append(float[] toAppend) {
         float[] newContent = Arrays.copyOf(data, data.length + toAppend.length);
         System.arraycopy(toAppend, 0, newContent, data.length, toAppend.length);

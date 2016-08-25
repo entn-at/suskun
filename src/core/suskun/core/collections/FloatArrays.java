@@ -2,12 +2,44 @@ package suskun.core.collections;
 
 public class FloatArrays {
 
+    public static float sum(float[] input) {
+        float total = 0;
+        for (float v : input) {
+            total += v;
+        }
+        return total;
+    }
+
+    public static void addInPlace(float[] input, float value) {
+        for (int i = 0; i < input.length; i++) {
+            input[i] += value;
+        }
+    }
+
+    public static float mean(float[] input) {
+        if (input.length == 0) {
+            throw new IllegalArgumentException("Cannot calculate mean of empty array.");
+        }
+        return sum(input) / input.length;
+    }
+
+
     public static void multiplyToFirst(float[] first, float[] second) {
         checkArrays(first, second);
         for (int i = 0; i < first.length; i++) {
             first[i] = first[i] * second[i];
         }
     }
+
+    public static float dotProduct(float[] first, float[] second) {
+        checkArrays(first, second);
+        float sum = 0;
+        for (int i = 0; i < first.length; i++) {
+            sum += first[i] * second[i];
+        }
+        return sum;
+    }
+
 
     public static void checkArrays(float[] first, float[] second) {
         if (first == null) {

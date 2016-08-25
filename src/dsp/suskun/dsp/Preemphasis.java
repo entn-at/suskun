@@ -3,6 +3,8 @@ package suskun.dsp;
 import suskun.core.FloatData;
 import suskun.core.FloatDataProcessor;
 
+import java.util.List;
+
 /**
  * This applies preemphasis to input with the
  * formula x[1] = x1[1] - x[0] * coefficient from 1..n
@@ -30,4 +32,9 @@ public class Preemphasis implements FloatDataProcessor {
         d[0] -= d[0] * coefficient;
         return data;
     }
+
+    public void processAll(List<FloatData> input) {
+        input.forEach(this::process);
+    }
+
 }

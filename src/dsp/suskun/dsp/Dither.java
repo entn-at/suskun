@@ -3,6 +3,7 @@ package suskun.dsp;
 import suskun.core.FloatData;
 import suskun.core.FloatDataProcessor;
 
+import java.util.List;
 import java.util.Random;
 
 import static java.lang.Math.*;
@@ -29,6 +30,10 @@ public class Dither implements FloatDataProcessor {
         }
     }
 
+    public float getMultiplier() {
+        return multiplier;
+    }
+
     @Override
     public FloatData process(FloatData input) {
         int startIndex = random.nextInt(values.length);
@@ -38,6 +43,10 @@ public class Dither implements FloatDataProcessor {
             startIndex++;
         }
         return input;
+    }
+
+    public void processAll(List<FloatData> input) {
+        input.forEach(this::process);
     }
 }
 
