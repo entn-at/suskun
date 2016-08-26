@@ -39,17 +39,17 @@ public class WavHeader {
     /**
      * Format data
      */
-    AudioFormat format;
+    public final AudioFormat format;
 
     /**
      * Start of the data chunk content. This will be used for loading the actual data.
      */
-    int dataStart;
+    public final int dataStart;
 
     /**
      * Amount of bytes in data chunk content.
      */
-    int dataSizeInBytes;
+    public final int dataSizeInBytes;
 
     private WavHeader(AudioFormat format, int dataStart, int dataSizeInBytes) {
         this.format = format;

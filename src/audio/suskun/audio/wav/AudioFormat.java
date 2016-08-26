@@ -91,4 +91,34 @@ public class AudioFormat {
         return blockIndexForTime(time) * bytePerBlock;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AudioFormat format1 = (AudioFormat) o;
+
+        if (channelCount != format1.channelCount) return false;
+        if (sampleRate != format1.sampleRate) return false;
+        if (byteRate != format1.byteRate) return false;
+        if (bytePerSample != format1.bytePerSample) return false;
+        if (bytePerBlock != format1.bytePerBlock) return false;
+        if (bitsPerSample != format1.bitsPerSample) return false;
+        if (littleEndian != format1.littleEndian) return false;
+        return format == format1.format;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = format.hashCode();
+        result = 31 * result + channelCount;
+        result = 31 * result + sampleRate;
+        result = 31 * result + byteRate;
+        result = 31 * result + bytePerSample;
+        result = 31 * result + bytePerBlock;
+        result = 31 * result + bitsPerSample;
+        result = 31 * result + (littleEndian ? 1 : 0);
+        return result;
+    }
 }

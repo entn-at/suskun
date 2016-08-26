@@ -22,6 +22,9 @@ public class WavReader {
     public WavReader(Path filePath, int channel) throws IOException {
         this.filePath = filePath;
         this.header = WavHeader.fromFile(filePath);
+        if (channel >= header.format.channelCount) {
+            throw new IllegalArgumentException(String.format("Wav file does not have channel %d", channel));
+        }
         this.channel = channel;
     }
 

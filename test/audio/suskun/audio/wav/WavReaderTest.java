@@ -25,7 +25,7 @@ public class WavReaderTest {
         Path input = Paths.get("test/data/wav/16khz-16bit-mono.wav");
         WavReader reader = new WavReader(input, 0);
         float[] data = reader.loadAll();
-        Assert.assertEquals(data.length, 32047);
+        Assert.assertEquals(32047, data.length);
         float[] first20 = Arrays.copyOfRange(data, 0, 20);
         float[] last20 = Arrays.copyOfRange(data, data.length - 20, data.length);
 
