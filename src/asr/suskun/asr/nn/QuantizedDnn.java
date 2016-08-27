@@ -4,6 +4,7 @@ import suskun.core.io.NativeUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * This is an optimized feed-forward neural network implementation that uses native code.
@@ -26,10 +27,10 @@ public class QuantizedDnn {
 
     static {
         try {
-            String osName = System.getProperty("os.name");
-            if (osName.contains("Windows")) {
+            String osName = System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
+            if (osName.contains("windows")) {
                 NativeUtils.loadLibraryFromJar("/resources/fast-dnn.dll");
-            } else if (osName.contains("Linux")) {
+            } else if (osName.contains("linux")) {
                 NativeUtils.loadLibraryFromJar("/resources/libfast-dnn.so");
             } else {
                 throw new IllegalStateException("There is no library for OS = " + osName);
@@ -54,7 +55,7 @@ public class QuantizedDnn {
      * [-weightCutOffValue, weightCutOffValue] are trimmed.
      */
     public static QuantizedDnn loadFromFile(File dnnFile, float weightCutOffValue) {
-        if(weightCutOffValue<=0){
+        if (weightCutOffValue <= 0) {
             throw new IllegalArgumentException("Weight cut off value must be positive. But it is " + weightCutOffValue);
         }
         QuantizedDnn dnn = new QuantizedDnn();
@@ -168,7 +169,6 @@ public class QuantizedDnn {
         return toMatrix(res1d, input.length, outputDimension);
     }
 
-
     private static float[] toVector(float[][] arr2d) {
         int vecCount = arr2d.length;
         int dimension = arr2d[0].length;
@@ -185,6 +185,12 @@ public class QuantizedDnn {
             System.arraycopy(arr, i * dimension, res[i], 0, dimension);
         }
         return res;
+    }
+
+    public String topology() {
+        return  inputDimension() + "-"
+                + (layerCount() - 1) + "x" + layerDimension(1) + "-"
+                + outputDimension();
     }
 
 }
