@@ -1,6 +1,7 @@
 package suskun.core;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 /**
  * A basic wrapper for a float array and integer id value.
@@ -87,6 +88,51 @@ public class FloatData {
 
     public static FloatData empty() {
         return new FloatData(0, new float[0]);
+    }
+
+    public void replaceData(float[] data) {
+        this.data = data;
+    }
+
+    public String toString() {
+        return id + " " + format(10, 5, " ", data);
+    }
+
+    public String toString(int amount) {
+        return id + " " + format(10, 5, " ", Arrays.copyOf(data, amount));
+    }
+
+
+    /**
+     * Formats a float array as string using English Locale.
+     */
+    public static String format(int rightPad, int fractionDigits, String delimiter, float... input) {
+        StringBuilder sb = new StringBuilder();
+        String formatStr = "%." + fractionDigits + "f";
+        int i = 0;
+        for (float v : input) {
+            String num = String.format(formatStr, v);
+            sb.append(String.format(Locale.ENGLISH, "%-" + rightPad + "s", num));
+            if (i++ < input.length - 1) sb.append(delimiter);
+        }
+        return sb.toString().trim();
+    }
+
+    public static float[] alignTo(float[] input, int alignment) {
+        int dimension = input.length;
+
+        int padded = alignedSize(dimension, alignment);
+        if (padded == dimension) {
+            return input;
+        }
+        return Arrays.copyOf(input, padded);
+    }
+
+    public static int alignedSize(int size, int alignment) {
+        if (size % alignment == 0) {
+            return size;
+        }
+        return size + alignment - (size % alignment);
     }
 
 
