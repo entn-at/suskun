@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MelFilter implements FloatDataProcessor {
+
     public int spectrogramSize;
     float minimumFrequency;
     float maximumFrequency;
@@ -16,7 +17,7 @@ public class MelFilter implements FloatDataProcessor {
 
     List<Filter> filters = new ArrayList<>();
 
-    public MelFilter(int samplingRate, 
+    public MelFilter(int samplingRate,
                      int spectrogramSize,
                      float minimumFrequency,
                      float maximumFrequency,
@@ -83,7 +84,7 @@ public class MelFilter implements FloatDataProcessor {
         return data.copyFor(binEnergies);
     }
 
-    static class Filter {
+    private static class Filter {
         int sampleStart; // inclusive
         int sampleEnd; // exclusive
         float[] weights;
