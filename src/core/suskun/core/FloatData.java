@@ -1,6 +1,9 @@
 package suskun.core;
 
+import com.google.common.base.Splitter;
+
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -135,5 +138,13 @@ public class FloatData {
         return size + alignment - (size % alignment);
     }
 
+    public static FloatData fromString(int id, String str, String delimiter) {
+        List<String> tokens = Splitter.on(delimiter).trimResults().omitEmptyStrings().splitToList(str);
+        float[] data = new float[tokens.size()];
+        for (int i = 0; i < data.length; i++) {
+            data[i] = Float.parseFloat(tokens.get(i));
+        }
+        return new FloatData(id, data);
+    }
 
 }

@@ -7,12 +7,12 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class SegmentTest {
+public class SpeechSegmentTest {
 
     @Test
     public void testFromWav() throws IOException {
         Path wavPath = Paths.get("test/data/wav/16khz-16bit-mono.wav");
-        Segment segment = Segment.fromWavFile(wavPath, 0);
+        SpeechSegment segment = SpeechSegment.fromWavFile(wavPath, 0);
         Assert.assertEquals(0, segment.source.channel);
         Assert.assertEquals(16000, segment.source.format.sampleRate);
         Assert.assertEquals(2, segment.source.format.bytePerSample);
@@ -24,7 +24,7 @@ public class SegmentTest {
     @Test
     public void testLoadData() throws IOException {
         Path wavPath = Paths.get("test/data/wav/16khz-16bit-mono.wav");
-        Segment segment = Segment.fromWavFile(wavPath, 0);
+        SpeechSegment segment = SpeechSegment.fromWavFile(wavPath, 0);
         float[] data = segment.getSegmentData(wavPath);
         Assert.assertEquals(32047, data.length);
     }
