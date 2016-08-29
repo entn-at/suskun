@@ -36,11 +36,15 @@ public class Preprocessor {
         this.paddedSize = IntMath.isPowerOfTwo(inputSize) ?
                 inputSize : IntMath.pow(2, IntMath.log2(inputSize, RoundingMode.UP));
 
-        this.windowFunction = new WindowFunction(builder.windowFunctionType, paddedSize);
+        this.windowFunction = new WindowFunction(builder.windowFunctionType, inputSize);
         this.removeDcOffset = builder.removeDcOffset;
         this.dither = new Dither(builder.ditherMultiplier);
         this.preemphasis = new Preemphasis(builder.preemphasisFactor);
         this.useRawEnergy = builder.useRawEnergy;
+    }
+
+    public static Builder builder(int size) {
+        return new Builder(size);
     }
 
     public static class Builder {
@@ -79,6 +83,10 @@ public class Preprocessor {
             this.useRawEnergy = value;
             return this;
         }
+
+        public Preprocessor build() {
+            return new Preprocessor(this);
+        }
     }
 
     public static class Result {
@@ -94,6 +102,8 @@ public class Preprocessor {
 
     public Result process(FloatData input) {
 
+        input = input.copy();
+
         dither.process(input);
 
         if (removeDcOffset) {
@@ -102,7 +112,7 @@ public class Preprocessor {
 
         float logEnergy = 0;
         if (useRawEnergy) {
-            logEnergy(input);
+            logEnergy = logEnergy(input);
         }
 
         preemphasis.process(input);
@@ -134,7 +144,7 @@ public class Preprocessor {
         @Override
         public FloatData process(FloatData data) {
             float mean = FloatArrays.mean(data.getData());
-            FloatArrays.addInPlace(data.getData(), mean);
+            FloatArrays.addInPlace(data.getData(), -mean);
             return data;
         }
 

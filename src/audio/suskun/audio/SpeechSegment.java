@@ -19,7 +19,6 @@ public class SpeechSegment {
         Preconditions.checkArgument(endSeconds >= 0, "End seconds [%.3f] cannot be negative.", endSeconds);
         Preconditions.checkArgument(startSeconds <= endSeconds,
                 "Start seconds [%.3f] cannot be larger than end seconds value [%.3f]", startSeconds, endSeconds);
-        Preconditions.checkNotNull(source);
         this.id = id;
         this.startSeconds = startSeconds;
         this.endSeconds = endSeconds;

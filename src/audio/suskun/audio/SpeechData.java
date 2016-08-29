@@ -31,6 +31,14 @@ public class SpeechData {
         this.content = Arrays.asList(content);
     }
 
+    public int vectorCount() {
+        return content.size();
+    }
+
+    public FloatData get(int i) {
+        return content.get(i);
+    }
+
     /**
      * Loads from text file with format:
      * <p>
@@ -47,8 +55,8 @@ public class SpeechData {
      * @return a list of speech data.
      */
     public static List<SpeechData> loadFromKaldiTxt(Path textFilePath) throws IOException {
-        Pattern idPattern = Pattern.compile("(.+?)(?:\\[.+?\\])",  Pattern.DOTALL |Pattern.MULTILINE);
-        Pattern dataPattern = Pattern.compile("(?:\\[)(.+?)(?:\\])",  Pattern.DOTALL |Pattern.MULTILINE);
+        Pattern idPattern = Pattern.compile("(.+?)(?:\\[.+?\\])", Pattern.DOTALL | Pattern.MULTILINE);
+        Pattern dataPattern = Pattern.compile("(?:\\[)(.+?)(?:\\])", Pattern.DOTALL | Pattern.MULTILINE);
         String all = TextUtil.loadUtfAsString(textFilePath);
         List<String> dataBlocks = RegexpUtil.getMatchesForGroup(all, dataPattern, 1);
         List<String> ids = RegexpUtil.getMatchesForGroup(all, idPattern, 1);
