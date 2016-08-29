@@ -85,7 +85,7 @@ public class WavReader {
 
             for (int i = 0; i < blockCount; i++) {
                 int start = i * 2 * (format.channelCount + channel);
-                result[i] = all[start + 1] << 8 | all[start];
+                result[i] = (short)(all[start + 1] << 8 & 0xff00) | (all[start] & 0xff);
             }
         }
 
