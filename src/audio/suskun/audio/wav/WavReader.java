@@ -84,8 +84,8 @@ public class WavReader {
         } else if (format.bitsPerSample == 16) {
 
             for (int i = 0; i < blockCount; i++) {
-                int start = i * 2 * (format.channelCount + channel);
-                result[i] = (short)(all[start + 1] << 8 & 0xff00) | (all[start] & 0xff);
+                int start = i * format.bytePerBlock + channel * 2;
+                result[i] = (short) (all[start + 1] << 8 & 0xff00) | (all[start] & 0xff);
             }
         }
 

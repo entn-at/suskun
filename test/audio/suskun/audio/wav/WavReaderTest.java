@@ -34,6 +34,29 @@ public class WavReaderTest {
     }
 
     @Test
+    public void test16KhzStereo() throws IOException {
+
+        float[] expectedFirst20 = {
+                -33f, -25.0f, -29.0f, -28.0f, -26.0f, -30.0f, -14.0f,
+                -5.0f, -27.0f, -23.0f, -6.0f, -24.0f, -56.0f, -38.0f,
+                -41.0f, -53.0f, -35.0f, -2.0f, 4.0f, -25.0f};
+        float[] expectedLast20 = {
+                9.0f, 13.0f, 12.0f, 2.0f, 21.0f, 16.0f, 19.0f,
+                3.0f, 17.0f, 26.0f, 23.0f, 11.0f, 12.0f, 25.0f,
+                -12.0f, -14.0f, -16.0f, -28.0f, 18.0f, 0.0f
+        };
+        Path input = Paths.get("test/data/wav/16khz-16bit-stereo.wav");
+        WavReader reader = new WavReader(input, 1);
+        float[] data = reader.loadAll();
+        Assert.assertEquals(32047, data.length);
+        float[] first20 = Arrays.copyOfRange(data, 0, 20);
+        float[] last20 = Arrays.copyOfRange(data, data.length - 20, data.length);
+
+        Assert.assertArrayEquals(expectedFirst20, first20, 0.001f);
+        Assert.assertArrayEquals(expectedLast20, last20, 0.001f);
+    }
+
+    @Test
     public void testALawChannel0() throws IOException {
 
         float[] expectedFirst10 = {
