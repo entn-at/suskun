@@ -37,6 +37,13 @@ public class FloatArrays {
         }
     }
 
+    public static void addToFirstScaled(float[] first, float[] second, float scale) {
+        checkArrays(first, second);
+        for (int i = 0; i < first.length; i++) {
+            first[i] = first[i] + second[i] * scale;
+        }
+    }
+
 
     public static float dotProduct(float[] first, float[] second) {
         checkArrays(first, second);

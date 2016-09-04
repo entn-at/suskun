@@ -37,16 +37,6 @@ public class WindowFeatures {
             this.future = future;
         }
 
-        public Builder pastFrameSize(int past) {
-            this.past = past;
-            return this;
-        }
-
-        public Builder futureFrameSize(int future) {
-            this.future = future;
-            return this;
-        }
-
         public Builder setLiveMode(boolean live) {
             this.live = live;
             return this;
