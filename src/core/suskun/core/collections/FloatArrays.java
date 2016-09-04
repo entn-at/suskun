@@ -31,6 +31,13 @@ public class FloatArrays {
         }
     }
 
+    public static void scaleInPlace(float[] first, float value) {
+        for (int i = 0; i < first.length; i++) {
+            first[i] = first[i] * value;
+        }
+    }
+
+
     public static float dotProduct(float[] first, float[] second) {
         checkArrays(first, second);
         float sum = 0;
