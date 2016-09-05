@@ -39,6 +39,10 @@ public class SpeechData {
         return content.get(i);
     }
 
+    public List<FloatData> getContent() {
+        return content;
+    }
+
     /**
      * Loads from text file with format:
      * <p>

@@ -4,7 +4,6 @@ import suskun.core.FloatData;
 import suskun.core.collections.FloatArrays;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -14,15 +13,14 @@ public class DeltaFeatures {
 
     private float[][] scales;
     public final int order;
-    public final int window;
+    public final int size;
     public final boolean live;
 
     List<FloatData> current = new ArrayList<>();
 
 
-    public DeltaFeatures(int order, int window, boolean live) {
+    public DeltaFeatures(int order, boolean live) {
         this.order = order;
-        this.window = window;
         this.live = live;
 
         // calculate scale values.
@@ -33,13 +31,13 @@ public class DeltaFeatures {
             float[] previousScales = scales[i - 1];
 
             int prevOffset = (previousScales.length - 1) / 2;
-            int currentOffset = prevOffset + window;
+            int currentOffset = prevOffset + order;
 
-            scales[i] = new float[previousScales.length + 2 * window];
+            scales[i] = new float[previousScales.length + 2 * order];
             float[] currentScales = scales[i];
 
             float normalizer = 0;
-            for (int j = -window; j <= window; j++) {
+            for (int j = -order; j <= order; j++) {
                 normalizer += j * j;
                 for (int k = -prevOffset; k <= prevOffset; k++) {
                     currentScales[j + k + currentOffset] += (j * 1.0f) * previousScales[k + prevOffset];
@@ -47,19 +45,20 @@ public class DeltaFeatures {
             }
             FloatArrays.scaleInPlace(currentScales, 1f / normalizer);
         }
+        this.size = (scales[order].length - 1) / 2;
     }
 
 
     List<FloatData> get(List<FloatData> input) {
 
         if (input.size() == 0) {
-            return Collections.emptyList();
+            return new ArrayList<>(0);
         }
 
         // This means first time usage.
         if (current.isEmpty()) {
             // we repeat the first one `past` times to generate initial frames nicely.
-            for (int i = 0; i < window; i++) {
+            for (int i = 0; i < size; i++) {
                 current.add(input.get(0));
             }
         }
@@ -69,16 +68,20 @@ public class DeltaFeatures {
 
         // if not live, add last frame `future` time.
         if (!live) {
-            for (int i = 0; i < window; i++) {
+            for (int i = 0; i < size; i++) {
                 current.add(input.get(input.size() - 1));
             }
+        }
+
+        if (current.size() < size * 2 + 1) {
+            return new ArrayList<>(0);
         }
 
         int inputVectorLength = current.get(0).length();
 
         List<FloatData> result = new ArrayList<>();
 
-        for (int frameIndex = window; frameIndex < current.size() - window; frameIndex++) {
+        for (int frameIndex = size; frameIndex < current.size() - size; frameIndex++) {
 
             float[] deltaFeatures = new float[inputVectorLength * (order + 1)];
 
@@ -99,10 +102,10 @@ public class DeltaFeatures {
         }
 
         //Remove the processed frames from the current.
-        current = new ArrayList<>(current.subList(current.size() - 2 * window, current.size()));
+        current = new ArrayList<>(current.subList(current.size() - 2 * size, current.size()));
 
         return result;
-    }    
+    }
 
 
 }

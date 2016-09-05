@@ -5,6 +5,7 @@ import suskun.core.FloatDataProcessor;
 import suskun.core.math.LogMath;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MelFilter implements FloatDataProcessor {
@@ -101,6 +102,11 @@ public class MelFilter implements FloatDataProcessor {
                 result += (samples[j] * weights[j - sampleStart]);
             }
             return result;
+        }
+
+        @Override
+        public String toString() {
+            return sampleStart + "-" + sampleEnd + " : " + Arrays.toString(weights);
         }
     }
 

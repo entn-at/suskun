@@ -2,6 +2,7 @@ package suskun.core;
 
 import com.google.common.base.Splitter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -136,6 +137,14 @@ public class FloatData {
             return size;
         }
         return size + alignment - (size % alignment);
+    }
+
+    public static List<FloatData> fromArrays(float[][] input) {
+        List<FloatData> result = new ArrayList<>(input.length);
+        for (int i = 0; i < input.length; i++) {
+            result.add(new FloatData(i, input[i].clone()));
+        }
+        return result;
     }
 
     public static FloatData fromString(int id, String str, String delimiter) {
