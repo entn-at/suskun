@@ -3,7 +3,6 @@ package suskun.dsp;
 import suskun.core.FloatData;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class WindowFeatures {
@@ -55,7 +54,7 @@ public class WindowFeatures {
     public List<FloatData> get(List<FloatData> input) {
 
         if (input.size() == 0) {
-            return Collections.emptyList();
+            return new ArrayList<>(0);
         }
 
         // This means first time usage.
@@ -74,6 +73,10 @@ public class WindowFeatures {
             for (int i = 0; i < future; i++) {
                 current.add(input.get(input.size() - 1));
             }
+        }
+
+        if (current.size() < past + future + 1) {
+            return new ArrayList<>(0);
         }
 
         int inputVectorLength = input.get(0).length();

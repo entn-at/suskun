@@ -31,6 +31,10 @@ public class MelFilter implements FloatDataProcessor {
         generateFilters();
     }
 
+    public static final MelFilter KALDI_DEFAULT_16KHZ = new MelFilter(16000, 256, 20, 8000, 23);
+
+    public static final MelFilter KALDI_DEFAULT_8KHZ = new MelFilter(8000, 128, 20, 4000, 23);
+
     /**
      * Generates triangular Mel band filters.
      */
@@ -111,14 +115,14 @@ public class MelFilter implements FloatDataProcessor {
     }
 
     /**
-     * Converts to Linear frequency value to Mel frequency value.
+     * Converts to Linear frequency value to Mel frequency value. (From Sphinx 4)
      */
     public static float linearToMel(float linearFreq) {
         return (float) (2595.0 * Math.log10(1.0 + linearFreq / 700.0));
     }
 
     /**
-     * Converts Mel frequency to linear frequency value.
+     * Converts Mel frequency to linear frequency value. (From Sphinx 4)
      */
     public static float melToLinear(float melFreq) {
         return (float) (700.0 * (Math.pow(10.0, (melFreq / 2595.0)) - 1.0));
