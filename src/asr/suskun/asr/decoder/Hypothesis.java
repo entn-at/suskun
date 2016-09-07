@@ -1,6 +1,6 @@
 package suskun.asr.decoder;
 
-public class Hypothesis {
+public class Hypothesis implements Comparable<Hypothesis> {
 
     Hypothesis previous;
     int stateId;
@@ -29,5 +29,10 @@ public class Hypothesis {
     @Override
     public int hashCode() {
         return stateId;
+    }
+
+    @Override
+    public int compareTo(Hypothesis o) {
+        return Float.compare(o.score, score);
     }
 }
