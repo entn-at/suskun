@@ -6,13 +6,13 @@ import java.math.RoundingMode;
 
 /**
  * A fast active list implementation. It uses a linear probing hash table like structure. However, it does not
+ * make remove operations.
  */
-
 
 public class ActiveList {
 
     static float DEFAULT_LOAD_FACTOR = 0.7f;
-    static int DEFAULT_BIN_SIZE = 4096;
+    static int DEFAULT_BIN_SIZE = 4096*2;
 
     Hypothesis[] hypotheses;
     int histogramSize = DEFAULT_BIN_SIZE;
@@ -86,29 +86,18 @@ public class ActiveList {
                 hypotheses[slot] = hypothesis;
             }
         }
-        if (min > hypothesis.score) {
-            min = hypothesis.score;
-        }
-        if (max < hypothesis.score) {
-            max = hypothesis.score;
-        }
+        updateMinMax(hypothesis.score);
         if (size == threshold) {
             expand();
         }
     }
 
-    /**
-     * Same as locate, except no need for hypothesis equality check.
-     */
-    private int locateForExpansion(Hypothesis hyp) {
-        int probeCount = 0;
-        int slot = firstProbe(hyp.hashCode());
-        while (true) {
-            final Hypothesis h = hypotheses[slot];
-            if (h == null) {
-                return slot;
-            }
-            slot = nextProbe(slot, ++probeCount);
+    private void updateMinMax(float score) {
+        if (min > score) {
+            min = score;
+        }
+        if (max < score) {
+            max = score;
         }
     }
 
@@ -120,8 +109,16 @@ public class ActiveList {
             if (hyp == null) {
                 continue;
             }
-            int slot = -locateForExpansion(hyp)-1;
-            expandedList.hypotheses[slot] = hyp;
+            int probeCount = 0;
+            int slot = firstProbe(hyp.hashCode());
+            while (true) {
+                final Hypothesis h = hypotheses[slot];
+                if (h == null) {
+                    expandedList.hypotheses[slot] = hyp;
+                    break;
+                }
+                slot = nextProbe(slot, ++probeCount);
+            }
         }
         this.hypotheses = expandedList.hypotheses;
         this.modulo = expandedList.modulo;

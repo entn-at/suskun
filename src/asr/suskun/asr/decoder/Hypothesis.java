@@ -6,6 +6,12 @@ public class Hypothesis {
     int stateId;
     float score;
 
+    public Hypothesis(Hypothesis previous, int stateId, float score) {
+        this.previous = previous;
+        this.stateId = stateId;
+        this.score = score;
+    }
+
     public float getScore() {
         return score;
     }
@@ -18,7 +24,6 @@ public class Hypothesis {
         Hypothesis that = (Hypothesis) o;
 
         return stateId == that.stateId;
-
     }
 
     @Override
