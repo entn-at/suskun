@@ -14,35 +14,35 @@ import java.util.List;
  * make remove operations.
  */
 
-public class ActiveList {
+class ActiveList {
 
     static final Logger logger = LoggerFactory.getLogger(ActiveList.class);
 
-    static float DEFAULT_LOAD_FACTOR = 0.7f;
+    private static float DEFAULT_LOAD_FACTOR = 0.7f;
 
-    static int DEFAULT_BIN_SIZE = 4096 * 2;
+    private static int DEFAULT_BIN_SIZE = 4096 * 2;
 
-    static int DEFAULT_CLUSTER_SIZE = 100;
+    private static int DEFAULT_CLUSTER_SIZE = 100;
 
-    static int DEFAULT_MIN_HYPOTHESIS_COUNT = 1000;
+    private static int DEFAULT_MIN_HYPOTHESIS_COUNT = 1000;
 
-    Hypothesis[] hypotheses;
-    int histogramSize = DEFAULT_BIN_SIZE;
-    float beamSize;
-    float loadFactor = DEFAULT_LOAD_FACTOR;
+    private Hypothesis[] hypotheses;
+    private int histogramSize = DEFAULT_BIN_SIZE;
+    private float beamSize;
+    private float loadFactor = DEFAULT_LOAD_FACTOR;
 
-    float min = Float.POSITIVE_INFINITY;
-    float max = Float.NEGATIVE_INFINITY;
+    private float min = Float.POSITIVE_INFINITY;
+    private float max = Float.NEGATIVE_INFINITY;
 
-    int modulo;
+    private int modulo;
 
-    int size;
+    private int size;
 
-    int expandLimit;
+    private int expandLimit;
 
-    int minHypothesisCount = DEFAULT_MIN_HYPOTHESIS_COUNT;
+    private int minHypothesisCount = DEFAULT_MIN_HYPOTHESIS_COUNT;
 
-    int clusterCount = DEFAULT_CLUSTER_SIZE;
+    private int clusterCount = DEFAULT_CLUSTER_SIZE;
 
     private Builder builder;
 
@@ -62,6 +62,38 @@ public class ActiveList {
     private ActiveList copyForExpansion() {
         builder.histogramSize = builder.histogramSize * 2;
         return new ActiveList(builder);
+    }
+
+    public int getHistogramSize() {
+        return histogramSize;
+    }
+
+    public float getBeamSize() {
+        return beamSize;
+    }
+
+    public float getLoadFactor() {
+        return loadFactor;
+    }
+
+    public float getMin() {
+        return min;
+    }
+
+    public float getMax() {
+        return max;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public int getMinHypothesisCount() {
+        return minHypothesisCount;
+    }
+
+    public int getClusterCount() {
+        return clusterCount;
     }
 
     public static class Builder {
