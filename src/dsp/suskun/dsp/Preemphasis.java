@@ -26,7 +26,7 @@ public class Preemphasis implements FloatDataProcessor {
         if (coefficient == 0) {
             return data;
         }
-        for (int i = data.length()-1; i > 0; i--) {
+        for (int i = data.length() - 1; i > 0; i--) {
             d[i] -= d[i - 1] * coefficient;
         }
         d[0] -= d[0] * coefficient;

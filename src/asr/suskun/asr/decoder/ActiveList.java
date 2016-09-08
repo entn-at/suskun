@@ -10,24 +10,23 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * A fast active list implementation. It uses a linear probing hash table like structure. However, it does not
- * make remove operations.
+ * A fast active list implementation. It uses a linear probing hash table like structure.
  */
 
 class ActiveList {
 
     static final Logger logger = LoggerFactory.getLogger(ActiveList.class);
 
-    private static float DEFAULT_LOAD_FACTOR = 0.7f;
+    public static float DEFAULT_LOAD_FACTOR = 0.7f;
 
-    private static int DEFAULT_BIN_SIZE = 4096 * 2;
+    public static int DEFAULT_INITIAL_CAPACITY = 4096 * 2;
 
-    private static int DEFAULT_CLUSTER_SIZE = 100;
+    public static int DEFAULT_CLUSTER_COUNT = 100;
 
-    private static int DEFAULT_MIN_HYPOTHESIS_COUNT = 1000;
+    public static int DEFAULT_MIN_HYPOTHESIS_COUNT = 1000;
 
     private Hypothesis[] hypotheses;
-    private int histogramSize = DEFAULT_BIN_SIZE;
+    private int capacity = DEFAULT_INITIAL_CAPACITY;
     private float beamSize;
     private float loadFactor = DEFAULT_LOAD_FACTOR;
 
@@ -42,30 +41,30 @@ class ActiveList {
 
     private int minHypothesisCount = DEFAULT_MIN_HYPOTHESIS_COUNT;
 
-    private int clusterCount = DEFAULT_CLUSTER_SIZE;
+    private int clusterCount = DEFAULT_CLUSTER_COUNT;
 
     private Builder builder;
 
     public ActiveList(Builder builder) {
         this.beamSize = builder.beamSize;
-        this.histogramSize = equalOrLargerPowerOfTwo(builder.histogramSize);
-        this.hypotheses = new Hypothesis[histogramSize];
+        this.capacity = equalOrLargerPowerOfTwo(builder.initialCapacity);
+        this.hypotheses = new Hypothesis[capacity];
         this.loadFactor = builder.loadFactor;
-        this.expandLimit = (int) (loadFactor * histogramSize);
+        this.expandLimit = (int) (loadFactor * capacity);
         this.minHypothesisCount = builder.minimumHypothesisCount;
         this.clusterCount = builder.clusterCount;
-        this.modulo = histogramSize - 1;
+        this.modulo = capacity - 1;
         // save this builder for cloning.
         this.builder = builder;
     }
 
     private ActiveList copyForExpansion() {
-        builder.histogramSize = builder.histogramSize * 2;
+        builder.initialCapacity = builder.initialCapacity * 2;
         return new ActiveList(builder);
     }
 
-    public int getHistogramSize() {
-        return histogramSize;
+    public int getCapacity() {
+        return capacity;
     }
 
     public float getBeamSize() {
@@ -84,7 +83,7 @@ class ActiveList {
         return max;
     }
 
-    public int getSize() {
+    public int size() {
         return size;
     }
 
@@ -96,19 +95,23 @@ class ActiveList {
         return clusterCount;
     }
 
-    public static class Builder {
-        int beamSize;
-        int histogramSize;
-        float loadFactor;
-        int minimumHypothesisCount;
-        int clusterCount;
+    public static Builder builder(float beamSize) {
+        return new Builder(beamSize);
+    }
 
-        public Builder(int beamSize) {
+    public static class Builder {
+        float beamSize;
+        int initialCapacity = DEFAULT_INITIAL_CAPACITY;
+        float loadFactor = DEFAULT_LOAD_FACTOR;
+        int minimumHypothesisCount = DEFAULT_MIN_HYPOTHESIS_COUNT;
+        int clusterCount = DEFAULT_CLUSTER_COUNT;
+
+        public Builder(float beamSize) {
             this.beamSize = beamSize;
         }
 
-        public Builder histogramSize(int histogramSize) {
-            this.histogramSize = histogramSize;
+        public Builder initialCapacity(int histogramSize) {
+            this.initialCapacity = histogramSize;
             return this;
         }
 
@@ -135,7 +138,6 @@ class ActiveList {
         }
 
     }
-
 
     int equalOrLargerPowerOfTwo(int i) {
         return IntMath.isPowerOfTwo(i) ? i : IntMath.pow(2, IntMath.log2(i, RoundingMode.UP));
@@ -215,7 +217,7 @@ class ActiveList {
             int probeCount = 0;
             int slot = firstProbe(hyp.hashCode());
             while (true) {
-                final Hypothesis h = hypotheses[slot];
+                final Hypothesis h = expandedList.hypotheses[slot];
                 if (h == null) {
                     expandedList.hypotheses[slot] = hyp;
                     break;
@@ -225,7 +227,7 @@ class ActiveList {
         }
         this.hypotheses = expandedList.hypotheses;
         this.modulo = expandedList.modulo;
-        this.histogramSize = expandedList.histogramSize;
+        this.capacity = expandedList.capacity;
         this.expandLimit = expandedList.expandLimit;
     }
 

@@ -102,8 +102,6 @@ public class Preprocessor {
 
     public Result process(FloatData input) {
 
-        input = input.copy();
-
         dither.process(input);
 
         if (removeDcOffset) {
