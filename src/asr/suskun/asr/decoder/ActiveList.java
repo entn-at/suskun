@@ -59,7 +59,11 @@ class ActiveList {
     }
 
     private ActiveList copyForExpansion() {
-        builder.initialCapacity = builder.initialCapacity * 2;
+        builder.initialCapacity = capacity * 2;
+        return new ActiveList(builder);
+    }
+
+    private ActiveList newInstance() {
         return new ActiveList(builder);
     }
 

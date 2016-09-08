@@ -100,5 +100,39 @@ public class ActiveListTest {
         Assert.assertEquals(1, list.getMin(), 0.01);
     }
 
+    @Test
+    public void testExtend2() {
+        ActiveList list = ActiveList
+                .builder(10)
+                .minimumHypothesisCount(0)
+                .initialCapacity(3)
+                .clusterCount(2)
+                .loadFactor(0.5f)
+                .build();
+        list.add(new Hypothesis(null, 10, 1));
+        Assert.assertEquals(1, list.size());
+        Assert.assertEquals(4, list.getCapacity());
+        list.add(new Hypothesis(null, 20, 2));
+        Assert.assertEquals(2, list.size());
+        Assert.assertEquals(8, list.getCapacity());
+        list.add(new Hypothesis(null, 30, 3));
+        list.add(new Hypothesis(null, 40, 4));
+        Assert.assertEquals(4, list.size());
+        Assert.assertEquals(16, list.getCapacity());
+        list.add(new Hypothesis(null, 60, 6));
+        list.add(new Hypothesis(null, 50, 5));
+        // below two will not cause expansion
+        list.add(new Hypothesis(null, 60, 8));
+        list.add(new Hypothesis(null, 50, 7));
+        Assert.assertEquals(6, list.size());
+        Assert.assertEquals(16, list.getCapacity());
+        list.add(new Hypothesis(null, 80, 9));
+        list.add(new Hypothesis(null, 70, 10));
+        Assert.assertEquals(8, list.size());
+        Assert.assertEquals(32, list.getCapacity());
+        Assert.assertEquals(10, list.getMax(), 0.01);
+        Assert.assertEquals(1, list.getMin(), 0.01);
+    }
+
 
 }
