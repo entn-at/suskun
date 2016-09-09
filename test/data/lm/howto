@@ -1,0 +1,7 @@
+For 2 grams with full vocabulary.
+
+lmplz --text numbers.corpus --arpa numbers.arpa -o 2
+
+You may need to remove <unk> from the list afterwards.
+
+kaldi/src/lmbin/arpa2fst --disambig-symbol=#0 --write-symbol-table=words.txt numbers.arpa numbers.G.fst

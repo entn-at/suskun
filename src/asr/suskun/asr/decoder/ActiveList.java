@@ -278,9 +278,7 @@ class ActiveList {
         List<Hypothesis> result = new ArrayList<>(size);
         List<List<Hypothesis>> clusters = cluster();
 
-        for (List<Hypothesis> cluster : clusters) {
-            result.addAll(cluster);
-        }
+        clusters.forEach(result::addAll);
         return result;
     }
 }
