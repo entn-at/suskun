@@ -12,14 +12,8 @@ public class UIntMap<T> extends UIntKeyHashBase {
     }
 
     public UIntMap(int size) {
-        int k = INITIAL_SIZE;
-        while (k < size)
-            k <<= 1;
-        keys = new int[k];
-        Arrays.fill(keys, -1);
-        values = (T[]) new Object[k];
-        threshold = (int) (k * LOAD_FACTOR);
-        modulo = k - 1;
+        super(size);
+        values = (T[]) new Object[keys.length];
     }
 
     /**
@@ -95,7 +89,7 @@ public class UIntMap<T> extends UIntKeyHashBase {
         List<T> result = new ArrayList<>();
         for (int i = 0; i < keys.length; i++) {
             int key = keys[i];
-            if(key>=0) {
+            if (key >= 0) {
                 result.add(values[i]);
             }
         }
@@ -105,22 +99,8 @@ public class UIntMap<T> extends UIntKeyHashBase {
     /**
      * returns the keys sorted ascending.
      */
-    public int[] getKeysSorted() {
-        int[] sorted = new int[keyCount];
-        int c =0;
-        for (int key : keys) {
-            if (key >= 0)
-                sorted[c++]=key;
-        }
-        Arrays.sort(sorted);
-        return sorted;
-    }
-
-    /**
-     * returns the keys sorted ascending.
-     */
     public List<T> getValuesSortedByKey() {
-        int[] sortedKeys = getKeysSorted();
+        int[] sortedKeys = getKeyArraySorted();
         List<T> result = new ArrayList<>(sortedKeys.length);
         for (int sortedKey : sortedKeys) {
             result.add(values[sortedKey]);

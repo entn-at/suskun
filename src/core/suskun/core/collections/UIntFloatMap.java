@@ -1,25 +1,26 @@
 package suskun.core.collections;
 
-public class UIntIntMap extends UIntKeyHashBase {
 
-    protected int[] values;
+public class UIntFloatMap extends UIntKeyHashBase {
 
-    public UIntIntMap() {
+    private float[] values;
+
+    public UIntFloatMap() {
         this(INITIAL_SIZE);
     }
 
-    public UIntIntMap(int size) {
+    public UIntFloatMap(int size) {
         super(size);
-        values = new int[keys.length];
+        values = new float[keys.length];
     }
 
     /**
-     * Returns the value for the key. If key does not exist, returns 0.
+     * Returns the value for the key. If key does not exist, returns NaN.
      *
      * @param key key
      * @return count of the key
      */
-    public int get(int key) {
+    public float get(int key) {
         if (key < 0) {
             throw new IllegalArgumentException("Key cannot be negative: " + key);
         }
@@ -28,7 +29,7 @@ public class UIntIntMap extends UIntKeyHashBase {
         while (true) {
             final int t = keys[slot];
             if (t == EMPTY) {
-                return 0;
+                return Float.NaN;
             }
             if (t == DELETED) {
                 slot = nextProbe(slot, ++probeCount);
@@ -41,8 +42,12 @@ public class UIntIntMap extends UIntKeyHashBase {
         }
     }
 
+    public boolean containsKey(int key) {
+        return locate(key) >= 0;
+    }
+
     private void expand() {
-        UIntIntMap h = new UIntIntMap(values.length * 2);
+        UIntFloatMap h = new UIntFloatMap(values.length * 2);
         for (int i = 0; i < keys.length; i++) {
             if (keys[i] >= 0) {
                 h.put(keys[i], values[i]);
@@ -60,7 +65,7 @@ public class UIntIntMap extends UIntKeyHashBase {
     /**
      * puts `key` with `value`. if `key` already exists, it overwrites its value with `value`
      */
-    public void put(int key, int value) {
+    public void put(int key, float value) {
         if (key < 0) {
             throw new IllegalArgumentException("Key cannot be negative: " + key);
         }
@@ -78,28 +83,4 @@ public class UIntIntMap extends UIntKeyHashBase {
         }
     }
 
-    /**
-     * if `key` exists, increments it's value with `amount`. if `key` does not exist,
-     * it creates it with the value `amount`.
-     * returns the `key`'s value after the increment operation.
-     */
-    public int increment(int key, int amount) {
-        if (key < 0) {
-            throw new IllegalArgumentException("Key cannot be negative: " + key);
-        }
-        if (keyCount == threshold) {
-            expand();
-        }
-        int loc = locate(key);
-        if (loc >= 0) {
-            values[loc] += amount;
-            return values[loc];
-        } else {
-            loc = -loc - 1;
-            keys[loc] = key;
-            values[loc] = amount;
-            keyCount++;
-            return amount;
-        }
-    }
 }

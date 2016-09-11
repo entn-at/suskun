@@ -9,13 +9,7 @@ public class UIntSet extends UIntKeyHashBase {
     }
 
     public UIntSet(int size) {
-        int k = INITIAL_SIZE;
-        while (k < size)
-            k <<= 1;
-        keys = new int[k];
-        Arrays.fill(keys, -1);
-        threshold = (int) (k * LOAD_FACTOR);
-        modulo = k - 1;
+        super(size);
     }
 
     public boolean  contains(int key) {
@@ -68,25 +62,4 @@ public class UIntSet extends UIntKeyHashBase {
         return keyCount;
     }
 
-    /**
-     * returns the keys sorted ascending.
-     */
-    public int[] getKeysSorted() {
-        int[] sorted = getKeys();
-        Arrays.sort(sorted);
-        return sorted;
-    }
-
-    /**
-     * returns the keys sorted ascending.
-     */
-    public int[] getKeys() {
-        int[] keyArray = new int[keyCount];
-        int c = 0;
-        for (int key : keys) {
-            if (key >= 0)
-                keyArray[c++] = key;
-        }
-        return keyArray;
-    }
 }

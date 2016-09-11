@@ -1,5 +1,10 @@
 package suskun.core.collections;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Base class for various specialized hash table like data structures that uses unsigned integer keys.
  */
@@ -29,6 +34,16 @@ public abstract class UIntKeyHashBase {
         return (previousIndex + probeCount) & modulo;
     }
 
+    public UIntKeyHashBase(int size) {
+        int k = INITIAL_SIZE;
+        while (k < size)
+            k <<= 1;
+        keys = new int[k];
+        Arrays.fill(keys, -1);
+        threshold = (int) (k * LOAD_FACTOR);
+        modulo = k - 1;
+    }
+
     protected int locate(int key) {
         int probeCount = 0;
         int slot = firstProbe(key);
@@ -51,6 +66,10 @@ public abstract class UIntKeyHashBase {
         }
     }
 
+    public boolean containsKey(int key) {
+        return locate(key) >= 0;
+    }
+
     /**
      * removes the key.
      */
@@ -66,4 +85,41 @@ public abstract class UIntKeyHashBase {
     public int size() {
         return keyCount;
     }
+
+    /**
+     * returns the keys sorted ascending.
+     */
+    public List<Integer> getKeysSorted() {
+        List<Integer> keyList = new ArrayList<>();
+        for (int key : keys) {
+            if (key >= 0)
+                keyList.add(key);
+        }
+        Collections.sort(keyList);
+        return keyList;
+    }
+
+    /**
+     * returns the keys sorted ascending.
+     */
+    public int[] getKeyArraySorted() {
+        int[] sorted = getKeyArray();
+        Arrays.sort(sorted);
+        return sorted;
+    }
+
+
+    /**
+     * returns the keys sorted ascending.
+     */
+    public int[] getKeyArray() {
+        int[] keyArray = new int[keyCount];
+        int c = 0;
+        for (int key : keys) {
+            if (key >= 0)
+                keyArray[c++] = key;
+        }
+        return keyArray;
+    }
+
 }
