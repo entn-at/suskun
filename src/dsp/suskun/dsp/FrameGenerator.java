@@ -30,7 +30,6 @@ public class FrameGenerator {
         this.shiftSampleSize = (int) (samplingRate * shiftLength / 1000d);
     }
 
-
     public int getFrameCounter() {
         return frameCounter;
     }

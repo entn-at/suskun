@@ -5,6 +5,8 @@ import suskun.core.FloatData;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -72,8 +74,13 @@ public class FeedForwardNetwork {
 
     public static Pattern FEATURE_LINES_PATTERN = Pattern.compile("(?:\\[)(.+?)(?:\\])", Pattern.DOTALL | Pattern.MULTILINE);
 
+
+    public static FeedForwardNetwork loadFromTextFile(Path networkFile, Path transformationFile) throws IOException {
+        return loadFromTextFile(networkFile.toFile(), transformationFile.toFile());
+    }
+
     /**
-     * Generate a JBlasDnn instance from text file
+     * Generate an instance from text file
      *
      * @throws IOException
      */
@@ -282,8 +289,8 @@ public class FeedForwardNetwork {
             for (int i = 0; i < outputDimension; i++) {
                 newWeights[i] = extend(weights[i], inputNodeCount);
             }
-            for(int i = outputDimension; i<outputNodeCount; i++) {
-                newWeights[i] = newWeights[i%outputDimension].clone();
+            for (int i = outputDimension; i < outputNodeCount; i++) {
+                newWeights[i] = newWeights[i % outputDimension].clone();
             }
             this.weights = newWeights;
             this.inputDimension = weights[0].length;
@@ -405,4 +412,15 @@ public class FeedForwardNetwork {
             f[i] = expArray[i] / total;
         }
     }
+
+    public static void main(String[] args) throws IOException {
+        Path root = Paths.get("../../data/large-16khz");
+        FeedForwardNetwork network = FeedForwardNetwork.loadFromTextFile(
+                root.resolve("nnet.txt"),
+                root.resolve("final_feature_transform.txt")
+        );
+        network.align(4, 16);
+        network.saveBinary(root.resolve("nnet.bin").toFile());
+    }
+
 }

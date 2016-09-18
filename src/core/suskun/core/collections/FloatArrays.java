@@ -1,5 +1,9 @@
 package suskun.core.collections;
 
+import com.google.common.base.Splitter;
+
+import java.util.List;
+
 public class FloatArrays {
 
     public static float sum(float[] input) {
@@ -52,6 +56,15 @@ public class FloatArrays {
             sum += first[i] * second[i];
         }
         return sum;
+    }
+
+    public static float[] fromDelimitedString(String input, String delimiter) {
+        List<String> tokens = Splitter.on(delimiter).omitEmptyStrings().trimResults().splitToList(input);
+        float[] result = new float[tokens.size()];
+        for (int i = 0; i < tokens.size(); i++) {
+            result[i] = Float.parseFloat(tokens.get(i));
+        }
+        return result;
     }
 
 

@@ -1,0 +1,60 @@
+package suskun.core.collections;
+
+import suskun.core.StringPair;
+import suskun.core.io.TextUtil;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.List;
+
+public class BidirectionalIndexLookup<T> {
+    UIntValueMap<T> indexLookup = new UIntValueMap<>();
+    UIntMap<T> wordLookup = new UIntMap<>();
+
+    public BidirectionalIndexLookup(UIntValueMap<T> indexLookup, UIntMap<T> indexMap) {
+        this.indexLookup = indexLookup;
+        this.wordLookup = indexMap;
+    }
+
+    public static BidirectionalIndexLookup<String> fromTextFileWithIndex(Path path) throws IOException {
+        if (!path.toFile().exists()) {
+            throw new IllegalArgumentException("File " + path + " does not exist.");
+        }
+        List<String> lines = TextUtil.loadLines(path);
+        UIntValueMap<String> indexLookup = new UIntValueMap<>(lines.size());
+        UIntMap<String> wordLookup = new UIntMap<>(lines.size());
+        for (String line : lines) {
+            StringPair pair = StringPair.fromString(line);
+            String word = pair.first;
+            int index = Integer.parseInt(pair.second);
+            if (indexLookup.contains(word)) {
+                throw new IllegalArgumentException("Duplicated word in line : [" + line + "]");
+            }
+            if (wordLookup.containsKey(index)) {
+                throw new IllegalArgumentException("Duplicated index in line : [" + line + "]");
+            }
+            if (index < 0) {
+                throw new IllegalArgumentException("Index Value cannot be negative : [" + line + "]");
+            }
+            indexLookup.put(word, index);
+            wordLookup.put(index, word);
+        }
+        return new BidirectionalIndexLookup<>(indexLookup, wordLookup);
+    }
+
+    public int getIndex(T key) {
+        return indexLookup.get(key);
+    }
+
+    public T getKey(int index) {
+        return wordLookup.get(index);
+    }
+
+    public Iterable<T> keys() {
+        return indexLookup.getKeyList();
+    }
+
+    public int size() {
+        return indexLookup.size();
+    }
+}
