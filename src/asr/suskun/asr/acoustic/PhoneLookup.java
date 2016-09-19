@@ -20,7 +20,7 @@ public class PhoneLookup {
     }
 
     public static PhoneLookup loadFromFile(Path path) throws IOException {
-        BidirectionalIndexLookup<String> lookup = BidirectionalIndexLookup.fromTextFileWithIndex(path);
+        BidirectionalIndexLookup<String> lookup = BidirectionalIndexLookup.fromTextFileWithIndex(path,' ');
         UIntValueMap<Phone> indexLookup = new UIntValueMap<>();
         Phone[] phoneLookup = new Phone[lookup.size()];
         for (String key : lookup.keys()) {
@@ -37,6 +37,10 @@ public class PhoneLookup {
 
     public Phone getPhone(int index) {
         return phoneLookup[index];
+    }
+
+    public Phone getPhone(String phoneId) {
+        return phoneLookup[getIndex(phoneId)];
     }
 
     public int getIndex(Phone phone) {

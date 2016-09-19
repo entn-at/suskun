@@ -9,14 +9,14 @@ import java.util.List;
 
 public class BidirectionalIndexLookup<T> {
     UIntValueMap<T> indexLookup = new UIntValueMap<>();
-    UIntMap<T> wordLookup = new UIntMap<>();
+    UIntMap<T> keyLookup = new UIntMap<>();
 
-    public BidirectionalIndexLookup(UIntValueMap<T> indexLookup, UIntMap<T> indexMap) {
+    public BidirectionalIndexLookup(UIntValueMap<T> indexLookup, UIntMap<T> keyLookup) {
         this.indexLookup = indexLookup;
-        this.wordLookup = indexMap;
+        this.keyLookup = keyLookup;
     }
 
-    public static BidirectionalIndexLookup<String> fromTextFileWithIndex(Path path) throws IOException {
+    public static BidirectionalIndexLookup<String> fromTextFileWithIndex(Path path, char delimiter) throws IOException {
         if (!path.toFile().exists()) {
             throw new IllegalArgumentException("File " + path + " does not exist.");
         }
@@ -24,7 +24,7 @@ public class BidirectionalIndexLookup<T> {
         UIntValueMap<String> indexLookup = new UIntValueMap<>(lines.size());
         UIntMap<String> wordLookup = new UIntMap<>(lines.size());
         for (String line : lines) {
-            StringPair pair = StringPair.fromString(line);
+            StringPair pair = StringPair.fromString(line, delimiter);
             String word = pair.first;
             int index = Integer.parseInt(pair.second);
             if (indexLookup.contains(word)) {
@@ -47,7 +47,7 @@ public class BidirectionalIndexLookup<T> {
     }
 
     public T getKey(int index) {
-        return wordLookup.get(index);
+        return keyLookup.get(index);
     }
 
     public Iterable<T> keys() {

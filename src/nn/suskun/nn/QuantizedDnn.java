@@ -1,4 +1,4 @@
-package suskun.asr.nn;
+package suskun.nn;
 
 import suskun.core.io.NativeUtils;
 

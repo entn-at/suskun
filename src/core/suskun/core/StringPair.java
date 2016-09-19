@@ -9,8 +9,8 @@ public class StringPair {
         this.second = second;
     }
 
-    public static StringPair fromString(String str) {
-        int index = str.indexOf(" ");
+    public static StringPair fromString(String str, char delimiter) {
+        int index = str.indexOf(delimiter);
         if (index == -1) {
             throw new IllegalArgumentException("Cannot extract two string from : [" + str + "]");
         }
@@ -20,6 +20,10 @@ public class StringPair {
             throw new IllegalArgumentException("Cannot extract two string from : [" + str + "]");
         }
         return new StringPair(first, second);
+    }
+
+    public static StringPair fromString(String str) {
+        return fromString(str, ' ');
     }
 
 }

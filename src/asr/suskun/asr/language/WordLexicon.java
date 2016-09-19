@@ -13,7 +13,7 @@ public class WordLexicon {
     }
 
     public static WordLexicon fromTextFileWithIndex(Path path) throws IOException {
-        BidirectionalIndexLookup<String> lookup = BidirectionalIndexLookup.fromTextFileWithIndex(path);
+        BidirectionalIndexLookup<String> lookup = BidirectionalIndexLookup.fromTextFileWithIndex(path, ' ');
         return new WordLexicon(lookup);
     }
 
