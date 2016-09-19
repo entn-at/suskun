@@ -31,6 +31,23 @@ public class SpeechData {
         this.content = Arrays.asList(content);
     }
 
+    public SpeechData(SpeechSegment segment, float[][] content) {
+        this.segment = segment;
+        for (int i = 0; i < content.length; i++) {
+            this.content.add(new FloatData(i, content[i]));
+        }
+    }
+
+
+    public SpeechSegment getSegment() {
+        return segment;
+    }
+
+    public static SpeechData fromWavfile(Path wavFile) throws IOException {
+        SpeechSegment segment = SpeechSegment.fromWavFile(wavFile, 0);
+        return new SpeechData(segment, new FloatData(0, segment.getSegmentData(wavFile)));
+    }
+
     public int vectorCount() {
         return content.size();
     }
@@ -78,6 +95,14 @@ public class SpeechData {
             result.add(new SpeechData(SpeechSegment.unknown(id), dataForId));
         }
 
+        return result;
+    }
+
+    public float[][] getContentAsMatrix() {
+        float[][] result = new float[content.size()][];
+        for (int i = 0; i < content.size(); i++) {
+            result[i] = content.get(i).getData();
+        }
         return result;
     }
 

@@ -34,7 +34,7 @@ public class MelCepstrum implements FloatDataProcessor {
 
     private float[] lifteringWeights;
 
-    private MelCepstrum(int cepstrumSize, int numberOfMelFilters, int lifteringCoefficient) {
+    public MelCepstrum(int cepstrumSize, int numberOfMelFilters, int lifteringCoefficient) {
         this.cepstrumSize = cepstrumSize;
         this.numberOfMelFilters = numberOfMelFilters;
         this.melCosine = new float[cepstrumSize][numberOfMelFilters];

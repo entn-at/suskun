@@ -20,6 +20,12 @@ public class FloatArrays {
         }
     }
 
+    public static void subtractInPlace(float[] input, float value) {
+        for (int i = 0; i < input.length; i++) {
+            input[i] -= value;
+        }
+    }
+
     public static float mean(float[] input) {
         if (input.length == 0) {
             throw new IllegalArgumentException("Cannot calculate mean of empty array.");
@@ -34,6 +40,14 @@ public class FloatArrays {
             first[i] = first[i] * second[i];
         }
     }
+
+    public static void subtractFromFirst(float[] first, float[] second) {
+        checkArrays(first, second);
+        for (int i = 0; i < first.length; i++) {
+            first[i] = first[i] - second[i];
+        }
+    }
+
 
     public static void scaleInPlace(float[] first, float value) {
         for (int i = 0; i < first.length; i++) {

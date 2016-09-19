@@ -31,6 +31,15 @@ public class DnnAcousticModel {
         this.transitionToPdfLookup = transitionToPdfLookup;
     }
 
+    public QuantizedDnn getDnn() {
+
+        return dnn;
+    }
+
+    public DnnAcousticScorer getScorer() {
+        return new DnnAcousticScorer(dnn, logAlignmentProbabilities);
+    }
+
     public static DnnAcousticModel loadFromDirectory(Path root) throws IOException {
 
         // load aligned binary dnn from file.

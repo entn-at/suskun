@@ -49,7 +49,7 @@ public class DeltaFeatures {
     }
 
 
-    List<FloatData> get(List<FloatData> input) {
+    public List<FloatData> get(List<FloatData> input) {
 
         if (input.size() == 0) {
             return new ArrayList<>(0);
